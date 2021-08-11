@@ -1,0 +1,29 @@
+
+
+#calculatorObject{
+    display: grid;
+    grid-template-columns: 700px;
+    grid-template-rows: 200px 600px;
+    height: 800px;
+    width: 700px;
+}
+
+#display{
+    background-color: grey;
+
+}
+#displayNumbers{
+    color: red;
+}
+
+#displayCalculation{
+    color: blue;
+}
+
+#buttonSection{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    height: 500px;
+    width: 400px;
+}
