@@ -11,9 +11,16 @@
 
 // case 3:
 // 3 = + 3 
+// lastEqual true, currNum = 3, prevNum
+
 
 // case 4:
 // 3 = 3 + 3
+// lastEqual true, currNum = 3, addNum resets currNum
+
+// case 5: 
+// 3 = = 
+// lastEqual true currNum = 3
 
 // operations are inspired by the window's calculator 
 
@@ -24,6 +31,7 @@ const displayCalculation = document.querySelector("#displayCalculation")
 const equalButton = document.querySelector("#equalButton")
 const percentButton = document.querySelector("#percentButton")
 const acButton = document.querySelector("#acButton")
+let lastEqual = false;
 
 let twoNumMemory = []
 let currNumber = "0"
@@ -47,8 +55,8 @@ function divide(a, b) {
         pass //DIV 0 ERROR TODO
     } else {
         return a / b;
-    }
-}
+    };
+};
 
 function operate(a, b, operator) {
     switch (operator) {
@@ -60,29 +68,39 @@ function operate(a, b, operator) {
             return multiply(a, b)
         case "divide":
             return divide(a, b)
-    }
-}
+    };
+};
 
 function addNumber() {
     const number = this.textContent
-    if (currNumber === "0" && number != ".") {
-        currNumber = number
-    } else {
+    if (lastEqual && typeof this.textContent === 'undefined'){
+        lastEqual = false
+    }else if(lastEqual && typeof this.textContent != 'undefined'){
+        currNumber = number;
+        lastEqual = false
+        twoNumMemory.length = 0
+    }
+    else if ((currNumber === "0" && number != ".") 
+    ) {
+        currNumber = number;
+    } 
+    else {
         currNumber = currNumber + number
     }
     displayNumbers.textContent = currNumber
-}
+};
 
 function logNumber() {
-    if (currNumber != "") {
+    if(currNumber != "") {
         if (currNumber.includes(".")) {
             var loggedNum = parseFloat(currNumber)
         } else {
             var loggedNum = parseInt(currNumber)
         }
         twoNumMemory.push(loggedNum);
-    }
-}
+    };
+
+};
 
 function displayCalc(mode = "current") {
     switch (currOperator) {
@@ -130,8 +148,7 @@ function calculate(mode = "operator") {
             currNumber = `${b}`
         };
     } else if (twoNumMemory.length === 1 && mode === "equal") {
-        currNumber = "0"
-        twoNumMemory.length = 0
+        lastEqual = true
     }
 };
 
@@ -141,7 +158,6 @@ function calcAndDisplay() {
         displayCalc();
     };
 };
-
 
 function reset() {
     currNumber = "0";
