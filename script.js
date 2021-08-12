@@ -3,6 +3,9 @@
 // > 8 + 4 =
 // lognum logoperator resetcurrNum lognum calculate
 
+// 4 = = = = =
+
+
 // case 2:
 // 4 + 4 + 5 =
 // > 8 + 5 = 
@@ -10,28 +13,46 @@
 
 
 // case 3:
-// 3 = + 3 
-// lastEqual true, currNum = 3, prevNum logNum
+// 3 = + 3 = + 
+// > 3 = 3 + 3
+// lastAction true, currNum = 3, prevNum logNum
 
 
 // case 4:
 // 3 = 3 + 3
-// lastEqual true, currNum = 3, addNum resets currNum lastEqual false
+// > 3 = 3 + 3
+// lastAction true, currNum = 3, addNum resets currNum lastAction 
 
 // case 5: 
 // 3 = = 
-// lastEqual true currNum = 3
+// > 3 = 3 = 3
+// lastAction true currNum = 3
+
+// case 6:
+// 3 + =
+// > 3 + 3 = 6
+
+// case 7:
+// 3 + +
+// 3 + -
+
 
 // operations are inspired by the window's calculator 
+// including most of its quirks 
 
 const numbers = document.querySelectorAll(".numberButton")
 const operatorButtons = document.querySelectorAll(".operatorButton")
 const displayNumbers = document.querySelector("#displayNumbers")
 const displayCalculation = document.querySelector("#displayCalculation")
+const allButtons = document.querySelectorAll("button")
 const equalButton = document.querySelector("#equalButton")
 const percentButton = document.querySelector("#percentButton")
+const negateButton = document.querySelector("#negateButton")
 const acButton = document.querySelector("#acButton")
-let lastEqual = false;
+let lastAction = "addNumber";
+let error = false;
+let operated = false
+
 
 let twoNumMemory = []
 let currNumber = "0"
@@ -67,31 +88,45 @@ function operate(a, b, operator) {
         case "multiply":
             return multiply(a, b)
         case "divide":
-            return divide(a, b)
+            if (b === 0) {
+                error = true;
+                break;
+            } else {
+                return divide(a, b)
+            }
     };
 };
 
 function addNumber() {
     const number = this.textContent
-    if (lastEqual && typeof this.textContent === 'undefined'){
-        lastEqual = false
-    }else if(lastEqual && typeof this.textContent != 'undefined'){
+    if (lastAction !== "addNumber"
+        && typeof this.textContent === 'undefined'
+        && twoNumMemory.length === 1) {
+        // where 3 = + and the plus sign replaces equal
+    } else if (lastAction !== "addNumber" && typeof this.textContent != 'undefined') {
         currNumber = number;
-        lastEqual = false
-        twoNumMemory.length = 0
-    }
-    else if (currNumber === "0" && number != "." 
-    ) {
+        if (lastAction === "equal") {
+            // where > 3 > = > 2 and two replaces three
+            twoNumMemory.length = 0
+        };
+    } else if (currNumber === "0") {
+        // just to prevent adding a lot of 0s on the display
         currNumber = number;
-    } 
-    else {
+    } else {
         currNumber = currNumber + number
-    }
+    };
     displayNumbers.textContent = currNumber
+    lastAction = "addNumber"
 };
 
-function logNumber() {
-    if(currNumber != "") {
+function logNumber(mode = "operator") {
+    if (lastAction === "operator"
+        && mode === "equal"
+        && twoNumMemory.length === 1) {
+        twoNumMemory.push(twoNumMemory[0])
+    } else if (!(lastAction != "addNumber" && mode === "operator") &&
+        !(lastAction === "equal" && mode === "equal" && !operated)
+    ) {
         if (currNumber.includes(".")) {
             var loggedNum = parseFloat(currNumber)
         } else {
@@ -99,10 +134,9 @@ function logNumber() {
         }
         twoNumMemory.push(loggedNum);
     };
-
 };
 
-function displayCalc(mode = "current") {
+function displayCalc(mode = "operator") {
     switch (currOperator) {
         case "multiply":
             var displayOperator = "\u00D7"
@@ -117,9 +151,9 @@ function displayCalc(mode = "current") {
             var displayOperator = "-"
             break;
     }
-    if (mode === "current") {
+    if (mode === "operator") {
         displayCalculation.textContent = `${twoNumMemory[0]} ${displayOperator}`
-    } else if (mode === "complete") {
+    } else if (mode === "equal") {
         if (twoNumMemory.length === 2) {
             displayCalculation.textContent = `${twoNumMemory[0]} ${displayOperator} ${twoNumMemory[1]} =`
         } else if (twoNumMemory.length === 1) {
@@ -131,31 +165,38 @@ function displayCalc(mode = "current") {
 function logOperator() {
     if (["add", "minus", "multiply", "divide"].includes(this.id)) {
         currOperator = this.id
-        lastEqual = false
+        operated = true
     };
     displayCalc();
-    currNumber = ""
+    lastAction = "operator";
 };
 
 function calculate(mode = "operator") {
     if (twoNumMemory.length === 2) {
         const a = twoNumMemory[0]
         const b = twoNumMemory[1]
-        const newTotal = operate(a, b, currOperator)
-        displayNumbers.textContent = newTotal
+        let newTotal = operate(a, b, currOperator)
+        if (countDecimals(newTotal) > 0) {
+            newTotal = parseFloat(newTotal.toFixed(Math.min(4, countDecimals(newTotal))))
+        }
         twoNumMemory.length = 0
-        twoNumMemory.push(newTotal)
-        if (mode === "equal") {
-            currNumber = `${b}`
+        if (!error) {
+            displayNumbers.textContent = newTotal
+            twoNumMemory.push(newTotal)
+            currNumber = newTotal
+            if (mode === "equal") {
+                currNumber = `${b}`
+                lastAction = "equal"
+            }
         };
     } else if (twoNumMemory.length === 1 && mode === "equal") {
-        lastEqual = true
-        twoNumMemory.length = 0
-    }
+        lastAction = "equal"
+        // twoNumMemory.length = 0
+    };
 };
 
 function calcAndDisplay() {
-    if (twoNumMemory.length === 2) {
+    if (twoNumMemory.length === 2 && !error) {
         calculate();
         displayCalc();
     };
@@ -165,35 +206,68 @@ function reset() {
     currNumber = "0";
     currOperator = null;
     twoNumMemory = [];
-    displayNumbers.textContent = "0"
-    displayCalculation.textContent = ""
+    displayNumbers.textContent = "0";
+    displayCalculation.textContent = "";
+    lastAction = "addNumber";
+    operated = false;
+};
+
+function checkError() {
+    if (error) {
+        displayNumbers.textContent = "DIV 0 ERROR";
+    };
+};
+
+function errorReset() {
+    if (error) {
+        reset()
+        error = false;
+    };
+};
+
+function countDecimals(value) {
+    if (Math.floor(value) === value) return 0;
+    return value.toString().split(".")[1].length || 0;
+};
+
+function negate() {
+    if (currNumber != "0") {
+        if (currNumber[0] === "-") {
+            currNumber = currNumber.slice(1, currNumber.length)
+        } else {
+            currNumber = "-" + currNumber
+        }
+    }
+    displayNumbers.textContent = currNumber
+}
+
+// applying all the functions 
+
+for (button of allButtons) {
+    button.addEventListener("click", errorReset)
 };
 
 for (operatorB of operatorButtons) {
     operatorB.addEventListener("click", () => {
-        logNumber();
-        calculate();
+        logNumber(mode = "operator");
+        calculate(mode = "operator");
     })
     operatorB.addEventListener("click", logOperator)
     operatorB.addEventListener("click", calcAndDisplay)
+    operatorB.addEventListener("click", checkError)
 };
 
 equalButton.addEventListener("click", () => {
-    logNumber();
-    displayCalc(mode = "complete");
+    logNumber(mode = "equal");
+    displayCalc(mode = "equal");
     calculate(mode = "equal");
+    checkError();
 });
-
-function percent() {
-    if (twoNumMemory.length === 1) {
-
-    } else if (twoNumMemory.length === 2) {
-
-    }
-};
 
 for (number of numbers) {
     number.addEventListener("click", addNumber)
-}
+};
 
 acButton.addEventListener("click", reset)
+
+negateButton.addEventListener("click", negate)

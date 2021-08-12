@@ -1,17 +1,27 @@
 
+*{
+    font-size: 30px;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+}
+
 
 #calculatorObject{
     display: grid;
-    grid-template-columns: 700px;
-    grid-template-rows: 200px 600px;
+    grid-template-columns: 600px;
+    grid-template-rows: 200px 500px;
     height: 800px;
-    width: 700px;
+    width: 600px;
+    border: 5px solid black;
+    border-radius: 20px;
 }
 
 #display{
     background-color: grey;
-
 }
+
 #displayNumbers{
     color: red;
 }
@@ -20,10 +30,102 @@
     color: blue;
 }
 
+button{
+    border: 2px solid black;
+    border-radius: 30px;
+    height: 50px;
+    width: 100px;
+}
+
+
+
 #buttonSection{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(5, 1fr);
+    grid-template-areas: 
+    "acButton acButton negateButton divideButton"
+    "b7 b8 b9 multiplyButton"
+    "b4 b5 b6 minusButton"
+    "b1 b2 b3 addButton"
+    "zeroButton zeroButton dotButton equalButton";
     height: 500px;
-    width: 400px;
+    width: 600px;
 }
+
+#acDiv{
+    grid-area: acButton;
+}
+
+#negateDiv{
+    grid-area: negateButton;
+} 
+
+#divideDiv{
+    grid-area: divideButton;
+}
+
+#multiplyDiv{
+    grid-area: multiplyButton;
+}
+
+#minusDiv{
+    grid-area: minusButton;
+}
+
+#addDiv{
+    grid-area: addButton;
+}
+
+#equalDiv{
+    grid-area: equalButton;
+}
+
+#b1{
+    grid-area: b1;
+}
+
+#b2{
+    grid-area: b2;
+}
+
+#b3{
+    grid-area: b3;
+}
+
+#b4{
+    grid-area: b4;
+}
+
+#b5{
+    grid-area: b5;
+}
+
+#b6{
+    grid-area: b6;
+}
+
+#b7{
+    grid-area: b7;
+}
+
+#b8{
+    grid-area: b8;
+}
+
+#b9{
+    grid-area: b9;
+}
+
+#b0{
+    grid-area: zeroButton;
+}
+
+#bdot{
+    grid-area: dotButton;
+}
+
+#equalDiv{
+    grid-area: equalButton
+}
+
