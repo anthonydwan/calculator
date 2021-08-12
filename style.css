@@ -19,11 +19,18 @@
 }
 
 #display{
+    display: grid;
+    grid-template-rows: 60px 80px;
     background-color: grey;
+    border-radius: 20px;
+    height: 140px;
+    width: 400px;
+    text-align: right;
 }
 
 #displayNumbers{
-    color: red;
+    color: white;
+    font-size: 50px;
 }
 
 #displayCalculation{
