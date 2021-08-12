@@ -11,12 +11,12 @@
 
 // case 3:
 // 3 = + 3 
-// lastEqual true, currNum = 3, prevNum
+// lastEqual true, currNum = 3, prevNum logNum
 
 
 // case 4:
 // 3 = 3 + 3
-// lastEqual true, currNum = 3, addNum resets currNum
+// lastEqual true, currNum = 3, addNum resets currNum lastEqual false
 
 // case 5: 
 // 3 = = 
@@ -80,7 +80,7 @@ function addNumber() {
         lastEqual = false
         twoNumMemory.length = 0
     }
-    else if ((currNumber === "0" && number != ".") 
+    else if (currNumber === "0" && number != "." 
     ) {
         currNumber = number;
     } 
@@ -131,6 +131,7 @@ function displayCalc(mode = "current") {
 function logOperator() {
     if (["add", "minus", "multiply", "divide"].includes(this.id)) {
         currOperator = this.id
+        lastEqual = false
     };
     displayCalc();
     currNumber = ""
@@ -149,6 +150,7 @@ function calculate(mode = "operator") {
         };
     } else if (twoNumMemory.length === 1 && mode === "equal") {
         lastEqual = true
+        twoNumMemory.length = 0
     }
 };
 
