@@ -49,6 +49,7 @@ const equalButton = document.querySelector("#equalButton")
 const percentButton = document.querySelector("#percentButton")
 const negateButton = document.querySelector("#negateButton")
 const acButton = document.querySelector("#acButton")
+const cancelButton = document.querySelector("#cancelButton")
 let lastAction = "addNumber";
 let error = false;
 let operated = false
@@ -98,69 +99,97 @@ function operate(a, b, operator) {
 };
 
 function addNumber() {
-    const number = this.textContent
-    if (lastAction !== "addNumber"
-        && typeof this.textContent === 'undefined'
-        && twoNumMemory.length === 1) {
-        // where 3 = + and the plus sign replaces equal
-    } else if (lastAction !== "addNumber" && typeof this.textContent != 'undefined') {
-        currNumber = number;
-        if (lastAction === "equal") {
-            // where > 3 > = > 2 and two replaces three
-            twoNumMemory.length = 0
-        };
-    } else if (currNumber === "0") {
-        // just to prevent adding a lot of 0s on the display
-        currNumber = number;
-    } else {
-        currNumber = currNumber + number
+    if (!error) {
+        const number = this.textContent
+        if (!(currNumber.includes(".") && number === ".")) {
+            if (lastAction !== "addNumber"
+                && typeof this.textContent === 'undefined'
+                && twoNumMemory.length === 1) {
+                // where 3 = + and the plus sign replaces equal
+            } else if (lastAction !== "addNumber" && typeof this.textContent != 'undefined') {
+                currNumber = number;
+                if (lastAction === "equal") {
+                    // where > 3 > = > 2 and two replaces three
+                    twoNumMemory.length = 0
+                };
+            } else if (currNumber === "0") {
+                // just to prevent adding a lot of 0s on the display
+                currNumber = number;
+            } else {
+                currNumber = currNumber + number
+            };
+            displayNumbers.textContent = currNumber
+            lastAction = "addNumber"
+        }
     };
-    displayNumbers.textContent = currNumber
-    lastAction = "addNumber"
-};
+}
+
+function cancel() {
+    if (!error) {
+        if (currNumber.length === 1 ||
+            (currNumber.length === 2 && currNumber[0] === "-")) {
+            currNumber = "0";
+        } else {
+            currNumber = currNumber.slice(0, currNumber.length - 1)
+        };
+        displayNumbers.textContent = currNumber
+        lastAction = "addNumber"
+    }
+}
+
 
 function logNumber(mode = "operator") {
-    if (lastAction === "operator"
-        && mode === "equal"
-        && twoNumMemory.length === 1) {
-        twoNumMemory.push(twoNumMemory[0])
-    } else if (!(lastAction != "addNumber" && mode === "operator") &&
-        !(lastAction === "equal" && mode === "equal" && !operated)
-    ) {
-        if (currNumber.includes(".")) {
-            var loggedNum = parseFloat(currNumber)
-        } else {
-            var loggedNum = parseInt(currNumber)
-        }
-        twoNumMemory.push(loggedNum);
+    if (!error) {
+        if (lastAction === "operator"
+            && mode === "equal"
+            && twoNumMemory.length === 1) {
+            twoNumMemory.push(twoNumMemory[0])
+        } else if (!(lastAction != "addNumber" && mode === "operator") &&
+            !(lastAction === "equal" && mode === "equal" && !operated)
+        ) {
+            if (currNumber.includes(".")) {
+                if (currNumber === ".") {
+                    var loggedNum = 0
+                } else {
+                    var loggedNum = parseFloat(currNumber)
+                }
+            } else {
+                var loggedNum = parseInt(currNumber)
+            }
+            twoNumMemory.push(loggedNum);
+        };
     };
-};
+}
+
 
 function displayCalc(mode = "operator") {
-    switch (currOperator) {
-        case "multiply":
-            var displayOperator = "\u00D7"
-            break;
-        case "divide":
-            var displayOperator = "\u00F7"
-            break;
-        case "add":
-            var displayOperator = "+"
-            break;
-        case "minus":
-            var displayOperator = "-"
-            break;
-    }
-    if (mode === "operator") {
-        displayCalculation.textContent = `${twoNumMemory[0]} ${displayOperator}`
-    } else if (mode === "equal") {
-        if (twoNumMemory.length === 2) {
-            displayCalculation.textContent = `${twoNumMemory[0]} ${displayOperator} ${twoNumMemory[1]} =`
-        } else if (twoNumMemory.length === 1) {
-            displayCalculation.textContent = `${twoNumMemory[0]} =`
+    if (!error) {
+        switch (currOperator) {
+            case "multiply":
+                var displayOperator = "\u00D7"
+                break;
+            case "divide":
+                var displayOperator = "\u00F7"
+                break;
+            case "add":
+                var displayOperator = "+"
+                break;
+            case "minus":
+                var displayOperator = "-"
+                break;
         }
+        if (mode === "operator") {
+            displayCalculation.textContent = `${twoNumMemory[0]} ${displayOperator}`
+        } else if (mode === "equal") {
+            if (twoNumMemory.length === 2) {
+                displayCalculation.textContent = `${twoNumMemory[0]} ${displayOperator} ${twoNumMemory[1]} =`
+            } else if (twoNumMemory.length === 1) {
+                displayCalculation.textContent = `${twoNumMemory[0]} =`
+            }
+        };
     };
-};
+}
+
 
 function logOperator() {
     if (["add", "minus", "multiply", "divide"].includes(this.id)) {
@@ -176,7 +205,7 @@ function calculate(mode = "operator") {
         const a = twoNumMemory[0]
         const b = twoNumMemory[1]
         let newTotal = operate(a, b, currOperator)
-        if (countDecimals(newTotal) > 0) {
+        if (!error && countDecimals(newTotal) > 0) {
             newTotal = parseFloat(newTotal.toFixed(Math.min(4, countDecimals(newTotal))))
         }
         twoNumMemory.length = 0
@@ -214,16 +243,28 @@ function reset() {
 
 function checkError() {
     if (error) {
-        displayNumbers.textContent = "DIV 0 ERROR";
+        displayNumbers.textContent = "DIV 0 ERR";
+        for (button of allButtons) {
+            button.classList.add("errorLight")
+            button.classList.remove("normalButtons")
+        acButton.classList.add("resetIndicator")
+        }
     };
 };
 
 function errorReset() {
-    if (error) {
-        reset()
+    if (error){
         error = false;
-    };
-};
+        reset()
+        for (button of allButtons) {
+            button.classList.remove("errorLight")
+            button.classList.add("normalButtons")
+        acButton.classList.remove("resetIndicator")
+        }
+    }
+}
+
+function errorACReset() { }
 
 function countDecimals(value) {
     if (Math.floor(value) === value) return 0;
@@ -231,21 +272,24 @@ function countDecimals(value) {
 };
 
 function negate() {
-    if (currNumber != "0") {
-        if (currNumber[0] === "-") {
-            currNumber = currNumber.slice(1, currNumber.length)
-        } else {
-            currNumber = "-" + currNumber
+    if (!error) {
+        if (currNumber != "0") {
+            if (currNumber[0] === "-") {
+                currNumber = currNumber.slice(1, currNumber.length)
+            } else {
+                currNumber = "-" + currNumber
+            }
         }
+        displayNumbers.textContent = currNumber
     }
-    displayNumbers.textContent = currNumber
 }
 
 // applying all the functions 
+for (button of allButtons){
+    button.classList.add("normalButtons")
+}
 
-for (button of allButtons) {
-    button.addEventListener("click", errorReset)
-};
+acButton.addEventListener("click", errorReset)
 
 for (operatorB of operatorButtons) {
     operatorB.addEventListener("click", () => {
@@ -271,3 +315,5 @@ for (number of numbers) {
 acButton.addEventListener("click", reset)
 
 negateButton.addEventListener("click", negate)
+
+cancelButton.addEventListener('click',cancel)
