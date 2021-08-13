@@ -99,7 +99,7 @@ function operate(a, b, operator) {
 };
 
 function addNumber() {
-    if (!error || currNumber.length > 10) {
+    if (!error && currNumber.length <= 10) {
         const number = this.textContent
         if (!(currNumber.includes(".") && number === ".")) {
             if (lastAction !== "addNumber"
