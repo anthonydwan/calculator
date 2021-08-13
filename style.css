@@ -9,15 +9,18 @@
 
 html{
     width: 100%;
-    background-color:rgb(59, 59, 59);
+    height: 100%;
+    background-color: rgb(49, 43, 54);
+    /* background:
+    linear-gradient(to bottom, rgb(105, 105, 105), rgb(20, 20, 20) ); */
 }
 
 #calculatorObject{
     margin: 100px auto;
     display: grid;
     grid-template-columns: 360px;
-    grid-template-rows: 125px 275px;
-    height: 400px;
+    grid-template-rows: 30px 105px 275px;
+    height: 410px;
     width: 360px;
     border: 5px solid  #105a6d;
     background-color:  #023047 ;
@@ -27,14 +30,48 @@ html{
 #display{
     display: grid;
     grid-template-rows: 25px 55px;
-    background-color: rgb(59, 59, 59);
+    background-color: rgb(31, 31, 31);
     border-radius: 20px;
     height: 80px;
     width: 260px;
     text-align: right;
     padding: 0px 30px;
-    margin: auto;
+    margin: 0px 18px 20px 18px;
     border: 2px solid black;
+}
+
+#githublink, a, img{
+    height: 20px;
+}
+
+a{
+    display: block;
+    margin: 5px auto;
+    height: 20px;
+    width: 20px;
+    position: relative;
+    transition: all 1s ease-in-out;
+}
+
+img:hover{
+    animation: 2s github infinite;
+}
+
+@keyframes github{
+    0%{position: relative;left: 0px;}
+    30%{position: relative;
+        transform: rotateZ(30deg);
+        left: 3px;}
+    66%{position: relative;
+        transform: rotateZ(-30deg);
+        left: -3px;}
+    100%{position: relative;left: 0px;}
+}
+
+img:active{
+    height: 23px;
+    width: 23px;
+    transition: all 0.25s ease-in-out;
 }
 
 #displayNumbers{
@@ -98,11 +135,16 @@ button{
 }
 
 .resetIndicator:hover{
-
+    background-color: red;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.644);
+    transition: all 0.15s ease-in-out;
+    animation-play-state: paused;
 }
 
 .resetIndicator:active{
-
+    background-color: #fbea00;
+    box-shadow: 0 0 7px #fbea004d;
+    transition: all 10ms ease-in-out;
 }
 
 @keyframes resetAC{
