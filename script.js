@@ -92,7 +92,7 @@ function operate(a, b, operator) {
         case "divide":
             if (b === 0) {
                 error = true;
-                errorType ="div0"
+                errorType = "div0"
                 break;
             } else {
                 return divide(a, b)
@@ -118,7 +118,7 @@ function addNumber() {
                 // just to prevent adding a lot of 0s on the display
                 currNumber = number;
             } else {
-                if(currNumber.length <= 11){
+                if (currNumber.length <= 11) {
                     currNumber = currNumber + number
                 }
             };
@@ -209,9 +209,9 @@ function calculate(mode = "operator") {
         const a = twoNumMemory[0]
         const b = twoNumMemory[1]
         let newTotal = operate(a, b, currOperator)
-        if(newTotal > 10e13 || newTotal < -10e13){
-            error=true
-            errorType="overflow"
+        if (newTotal > 10e13 || newTotal < -10e13) {
+            error = true
+            errorType = "overflow"
         }
         if (!error && countDecimals(newTotal) > 0) {
             newTotal = parseFloat(newTotal.toFixed(Math.min(4, countDecimals(newTotal))))
@@ -251,28 +251,28 @@ function reset() {
 
 function checkError() {
     if (error) {
-        if(errorType ==="div0"){
+        if (errorType === "div0") {
             displayNumbers.textContent = "DIV 0 ERR";
-        } else if(errorType === "overflow"){
+        } else if (errorType === "overflow") {
             displayNumbers.textContent = "OVERFLOW"
         }
 
         for (button of allButtons) {
             button.classList.add("errorLight")
             button.classList.remove("normalButtons")
-        acButton.classList.add("resetIndicator")
+            acButton.classList.add("resetIndicator")
         }
     };
 };
 
 function errorReset() {
-    if (error){
+    if (error) {
         error = false;
         reset()
         for (button of allButtons) {
             button.classList.remove("errorLight")
             button.classList.add("normalButtons")
-        acButton.classList.remove("resetIndicator")
+            acButton.classList.remove("resetIndicator")
         }
     }
 }
@@ -296,9 +296,32 @@ function negate() {
         displayNumbers.textContent = currNumber
     }
 }
+1
+function makeClick(e) {
+    const key = document.querySelector(`button[data-key="${e.keyCode}"]`)
+    const numpad = document.querySelector(`button[data-numpad="${e.keyCode}"]`)
+    if (key) {
+        key.classList.add("keypressed")
+        e.preventDefault();
+        key.click();
+    } else if (numpad){
+
+    }
+}
+
+function keyUp(e){
+    const key = document.querySelector(`button[data-key="${e.keyCode}"]`)
+    if (key) {
+        key.classList.remove("keypressed")
+        e.preventDefault();
+    }
+}
 
 // applying all the functions 
-for (button of allButtons){
+window.addEventListener('keydown', makeClick);
+window.addEventListener('keyup', keyUp);
+
+for (button of allButtons) {
     button.classList.add("normalButtons")
 }
 
@@ -329,4 +352,5 @@ acButton.addEventListener("click", reset)
 
 negateButton.addEventListener("click", negate)
 
-cancelButton.addEventListener('click',cancel)
+cancelButton.addEventListener('click', cancel)
+

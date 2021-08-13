@@ -118,7 +118,7 @@ button{
     transition: all 0.2s ease-in-out;
 }
 
-.normalButtons:active{
+.normalButtons:active, .keypressed{
     background-color: #fbea00;
     box-shadow: 0 0 7px #fbea004d;
     transition: all 10ms ease-in-out;

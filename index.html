@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,38 +8,41 @@
     <title>Calculator</title>
     <script src="script.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Georama:wght@100&family=Lato&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Georama:wght@100&family=Lato&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="calculatorObject">
-        <div id= "githubLink"><a href="https://github.com/anthonydwan"><img draggable="false" src="images/github.png" alt="github link"></a></div>
+        <div id="githubLink"><a href="https://github.com/anthonydwan"><img draggable="false" src="images/github.png"
+                    alt="github link"></a></div>
         <div id="display">
             <div id="displayCalculation"></div>
             <div id="displayNumbers">0</div>
         </div>
         <div id="buttonSection">
-            <div id="acDiv"><button id="acButton">AC</button></div>
-            <div id="cancelDiv"><button id="cancelButton">C</button></div>
-            <div id="negateDiv"><button id="negateButton">+/-</button></div>
-            <div id="divideDiv"><button id="divide" class = "operatorButton">&#247;</button></div>
-            <div id="b7"><button  class = "numberButton">7</button></div>
-            <div id="b8"><button  class = "numberButton">8</button></div>
-            <div id="b9"><button  class = "numberButton">9</button></div>
-            <div id="multiplyDiv"><button id="multiply" class = "operatorButton">&#215;</button></div>
-            <div id="b4"><button  class = "numberButton">4</button></div>
-            <div id="b5"><button  class = "numberButton">5</button></div>
-            <div id="b6"><button  class = "numberButton">6</button></div>
-            <div id="minusDiv"><button id="minus" class = "operatorButton">-</button></div>
-            <div id="b1"><button  class = "numberButton">1</button></div>
-            <div id="b2"><button  class = "numberButton">2</button></div>
-            <div id="b3"><button  class = "numberButton">3</button></div>
-            <div id="addDiv"><button id="add" class = "operatorButton">+</button></div>
-            <div id="b0"><button  id="zeroB" class ="numberButton">0</button></div>
-            <div id="bdot"><button  class = "numberButton">.</button></div>
-            <div id="equalDiv"><button id="equalButton">=</button></div>
+            <div id="acDiv"><button data-key="27" data-numpad="" id="acButton">AC</button></div>
+            <div id="cancelDiv"><button data-key="8" data-numpad="" id="cancelButton">C</button></div>
+            <div id="negateDiv"><button data-key="9" data-numpad="" id="negateButton">+/-</button></div>
+            <div id="divideDiv"><button data-key="111" data-numpad=""  id="divide" class="operatorButton">&#247;</button></div>
+            <div id="b7"><button data-key="55" data-numpad=""  class="numberButton">7</button></div>
+            <div id="b8"><button data-key="56" data-numpad=""  class="numberButton">8</button></div>
+            <div id="b9"><button data-key="57" data-numpad=""  class="numberButton">9</button></div>
+            <div id="multiplyDiv"><button data-key="106" data-numpad=""  id="multiply" class="operatorButton">&#215;</button></div>
+            <div id="b4"><button data-key="52" data-numpad=""  class="numberButton">4</button></div>
+            <div id="b5"><button data-key="53" data-numpad=""  class="numberButton">5</button></div>
+            <div id="b6"><button data-key="54" data-numpad=""  class="numberButton">6</button></div>
+            <div id="minusDiv"><button data-key="109" data-numpad=""  id="minus" class="operatorButton">-</button></div>
+            <div id="b1"><button data-key="49" data-numpad=""  class="numberButton">1</button></div>
+            <div id="b2"><button data-key="50" data-numpad=""  class="numberButton">2</button></div>
+            <div id="b3"><button data-key="51" data-numpad=""  class="numberButton">3</button></div>
+            <div id="addDiv"><button data-key="107" data-numpad=""  id="add" class="operatorButton">+</button></div>
+            <div id="b0"><button data-key="96" data-numpad="" id="zeroB" class="numberButton">0</button></div>
+            <div id="bdot"><button data-key="110" data-numpad="" class="numberButton">.</button></div>
+            <div id="equalDiv"><button data-key="187" data-numpad=""  id="equalButton">=</button></div>
         </div>
     </div>
 </body>
+
 </html>
