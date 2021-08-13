@@ -1,2 +1,2 @@
-# odin_calculator
+# odin calculator
 web basic calculator
