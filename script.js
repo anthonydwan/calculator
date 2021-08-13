@@ -301,16 +301,21 @@ function makeClick(e) {
     const key = document.querySelector(`button[data-key="${e.keyCode}"]`)
     const numpad = document.querySelector(`button[data-numpad="${e.keyCode}"]`)
     if (key) {
+        if(e.keyCode===187 && e.shiftKey){
+            key = document.querySelector("#add")
+        } else if (e.keyCode===187){
+            key = document.querySelector("#equalButton")
+        }
         key.classList.add("keypressed")
         e.preventDefault();
         key.click();
     } else if (numpad){
-
     }
 }
 
 function keyUp(e){
     const key = document.querySelector(`button[data-key="${e.keyCode}"]`)
+    const numpad = document.querySelector(`button[data-numpad="${e.keyCode}"]`)
     if (key) {
         key.classList.remove("keypressed")
         e.preventDefault();
