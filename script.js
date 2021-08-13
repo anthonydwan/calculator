@@ -53,6 +53,7 @@ const cancelButton = document.querySelector("#cancelButton")
 let lastAction = "addNumber";
 let error = false;
 let operated = false
+let errorType = "div0"
 
 
 let twoNumMemory = []
@@ -91,6 +92,7 @@ function operate(a, b, operator) {
         case "divide":
             if (b === 0) {
                 error = true;
+                errorType ="div0"
                 break;
             } else {
                 return divide(a, b)
@@ -99,7 +101,7 @@ function operate(a, b, operator) {
 };
 
 function addNumber() {
-    if (!error && currNumber.length <= 10) {
+    if (!error) {
         const number = this.textContent
         if (!(currNumber.includes(".") && number === ".")) {
             if (lastAction !== "addNumber"
@@ -116,7 +118,9 @@ function addNumber() {
                 // just to prevent adding a lot of 0s on the display
                 currNumber = number;
             } else {
-                currNumber = currNumber + number
+                if(currNumber.length <= 11){
+                    currNumber = currNumber + number
+                }
             };
             displayNumbers.textContent = currNumber
             lastAction = "addNumber"
@@ -205,6 +209,10 @@ function calculate(mode = "operator") {
         const a = twoNumMemory[0]
         const b = twoNumMemory[1]
         let newTotal = operate(a, b, currOperator)
+        if(newTotal > 10e12){
+            error=true
+            errorType="overflow"
+        }
         if (!error && countDecimals(newTotal) > 0) {
             newTotal = parseFloat(newTotal.toFixed(Math.min(4, countDecimals(newTotal))))
         }
@@ -243,7 +251,12 @@ function reset() {
 
 function checkError() {
     if (error) {
-        displayNumbers.textContent = "DIV 0 ERR";
+        if(errorType ==="div0"){
+            displayNumbers.textContent = "DIV 0 ERR";
+        } else if(errorType === "overflow"){
+            displayNumbers.textContent = "OVERFLOW"
+        }
+
         for (button of allButtons) {
             button.classList.add("errorLight")
             button.classList.remove("normalButtons")
