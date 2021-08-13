@@ -220,7 +220,7 @@ function calculate(mode = "operator") {
         if (!error) {
             displayNumbers.textContent = newTotal
             twoNumMemory.push(newTotal)
-            currNumber = newTotal
+            currNumber = newTotal.toString()
             if (mode === "equal") {
                 currNumber = `${b}`
                 lastAction = "equal"
@@ -298,26 +298,41 @@ function negate() {
 }
 1
 function makeClick(e) {
-    const key = document.querySelector(`button[data-key="${e.keyCode}"]`)
-    const numpad = document.querySelector(`button[data-numpad="${e.keyCode}"]`)
+    let key = document.querySelector(`button[data-key="${e.code}"]`)
+    let numpad = document.querySelector(`button[data-numpad="${e.code}"]`)
     if (key) {
-        if(e.keyCode===187 && e.shiftKey){
+        if (e.code === "Equal" && e.shiftKey){
             key = document.querySelector("#add")
-        } else if (e.keyCode===187){
+        } else if (e.code === "Equal" ){
             key = document.querySelector("#equalButton")
+        } else if (e.code === "Digit8" && e.shiftKey){
+            key = document.querySelector("#multiply")
         }
         key.classList.add("keypressed")
         e.preventDefault();
         key.click();
     } else if (numpad){
+        numpad.classList.add("keypressed")
+        e.preventDefault();
+        numpad.click();
     }
 }
 
 function keyUp(e){
-    const key = document.querySelector(`button[data-key="${e.keyCode}"]`)
-    const numpad = document.querySelector(`button[data-numpad="${e.keyCode}"]`)
+    let key = document.querySelector(`button[data-key="${e.code}"]`)
+    let numpad = document.querySelector(`button[data-numpad="${e.code}"]`)
     if (key) {
+        if (e.code === "Equal" && e.shiftKey){
+            key = document.querySelector("#add")
+        } else if (e.code === "Equal" ){
+            key = document.querySelector("#equalButton")
+        } else if (e.code === "Digit8" && e.shiftKey){
+            key = document.querySelector("#multiply")
+        }
         key.classList.remove("keypressed")
+        e.preventDefault();
+    } else if (numpad){
+        numpad.classList.remove("keypressed")
         e.preventDefault();
     }
 }
