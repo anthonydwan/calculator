@@ -209,7 +209,7 @@ function calculate(mode = "operator") {
         const a = twoNumMemory[0]
         const b = twoNumMemory[1]
         let newTotal = operate(a, b, currOperator)
-        if(newTotal > 10e12){
+        if(newTotal > 10e13 || newTotal < -10e13){
             error=true
             errorType="overflow"
         }

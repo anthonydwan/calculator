@@ -19,8 +19,8 @@ html{
     margin: 100px auto;
     display: grid;
     grid-template-columns: 360px;
-    grid-template-rows: 30px 105px 275px;
-    height: 410px;
+    grid-template-rows: 30px 125px 275px;
+    height: 430px;
     width: 360px;
     border: 5px solid  #105a6d;
     background-color:  #023047 ;
@@ -29,10 +29,10 @@ html{
 
 #display{
     display: grid;
-    grid-template-rows: 25px 55px;
+    grid-template-rows: 45px 55px;
     background-color: rgb(31, 31, 31);
     border-radius: 20px;
-    height: 80px;
+    height: 100px;
     width: 260px;
     text-align: right;
     padding: 0px 30px;
